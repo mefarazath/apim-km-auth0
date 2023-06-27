@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.auth0.client.model;
+package org.wso2.asgardeo.client.model;
 
 import com.google.gson.annotations.SerializedName;
 import org.wso2.carbon.apimgt.impl.APIConstants;

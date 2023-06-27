@@ -16,13 +16,13 @@
  * under the License.
  */
 
-package org.wso2.auth0.client;
+package org.wso2.asgardeo.client;
 
-public class Auth0Constants {
-    public static final String AUTH0_TYPE = "Auth0";
+public class AsgardeoConstants {
+    public static final String AUTH0_TYPE = "Asgardeo";
     public static final String SCOPE = "scope";
     public static final String AZP = "azp";
-    public static final String AUTH0_DISPLAY_NAME = "Auth0";
+    public static final String AUTH0_DISPLAY_NAME = "Asgardeo";
     public static final String CLIENT_ID = "client_id";
     public static final String CLIENT_SECRET = "client_secret";
     public static final String AUDIENCE = "audience";
@@ -33,4 +33,7 @@ public class Auth0Constants {
     public static final String API_AUDIENCE = "audience_of_api";
     public static final String ERROR_ENCODING_METHOD_NOT_SUPPORTED = "Encoding method is not supported";
     public static final String UTF_8 = "UTF-8";
+
+    public static final String APP_MANAGEMENT_SCOPES = "internal_application_mgt_create " +
+            "internal_application_mgt_delete internal_application_mgt_update internal_application_mgt_view";
 }

@@ -16,30 +16,32 @@
  * under the License.
  */
 
-package org.wso2.auth0.client.model;
+package org.wso2.asgardeo.client.model;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Auth0ClientInfo {
+public class AsgardeoClientInfo {
     @SerializedName("client_id")
     private String clientId;
     @SerializedName("client_secret")
     private String clientSecret;
-    @SerializedName("app_type")
-    private String applicationType;
-    @SerializedName("token_endpoint_auth_method")
-    private String tokenEndpointAuthMethod;
-    @SerializedName("client_id_issued_at")
-    private Long clientIdIssuedTime;
-    @SerializedName("name")
+//    @SerializedName("app_type")
+//    private String applicationType;
+//    @SerializedName("token_endpoint_auth_method")
+//    private String tokenEndpointAuthMethod;
+//    @SerializedName("client_id_issued_at")
+//    private Long clientIdIssuedTime;
+    @SerializedName("client_name")
     private String clientName;
     @SerializedName("grant_types")
     private List<String> grantTypes = new ArrayList<>();
-    @SerializedName("callbacks")
+    @SerializedName("redirect_uris")
     private List<String> redirectUris = new ArrayList<>();
+
+    // TODO: Token Type
 
     public String getClientId() {
         return clientId;
@@ -56,30 +58,30 @@ public class Auth0ClientInfo {
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
     }
-
-    public String getApplicationType() {
-        return applicationType;
-    }
-
-    public void setApplicationType(String applicationType) {
-        this.applicationType = applicationType;
-    }
-
-    public String getTokenEndpointAuthMethod() {
-        return tokenEndpointAuthMethod;
-    }
-
-    public void setTokenEndpointAuthMethod(String tokenEndpointAuthMethod) {
-        this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
-    }
-
-    public Long getClientIdIssuedTime() {
-        return clientIdIssuedTime;
-    }
-
-    public void setClientIdIssuedTime(Long clientIdIssuedTime) {
-        this.clientIdIssuedTime = clientIdIssuedTime;
-    }
+//
+//    public String getApplicationType() {
+//        return applicationType;
+//    }
+//
+//    public void setApplicationType(String applicationType) {
+//        this.applicationType = applicationType;
+//    }
+//
+//    public String getTokenEndpointAuthMethod() {
+//        return tokenEndpointAuthMethod;
+//    }
+//
+//    public void setTokenEndpointAuthMethod(String tokenEndpointAuthMethod) {
+//        this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
+//    }
+//
+//    public Long getClientIdIssuedTime() {
+//        return clientIdIssuedTime;
+//    }
+//
+//    public void setClientIdIssuedTime(Long clientIdIssuedTime) {
+//        this.clientIdIssuedTime = clientIdIssuedTime;
+//    }
 
     public String getClientName() {
         return clientName;

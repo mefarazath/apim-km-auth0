@@ -2,13 +2,14 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.wso2.km.ext.auth0</groupId>
-        <artifactId>auth0.auth.client</artifactId>
+        <groupId>org.wso2.km.ext.asgardeo</groupId>
+        <artifactId>asgardeo.auth.client</artifactId>
         <version>1.0.6-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>auth0.key.manager</artifactId>
-    <name>Auth0 Key Manager Component</name>
+
+    <artifactId>asgardeo.key.manager</artifactId>
+    <name>Asgardeo Key Manager Component</name>
     <version>1.0.6-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>bundle</packaging>
@@ -25,7 +26,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.auth0.client.*;version="${project.version}"
+                            org.wso2.asgardeo.client.*;version="${project.version}"
                         </Export-Package>
                         <Import-Package>
                             com.google.gson.*;version="[2.1,3)",

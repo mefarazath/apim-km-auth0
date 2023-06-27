@@ -16,11 +16,11 @@
  * under the License.
  */
 
-package org.wso2.auth0.client.model;
+package org.wso2.asgardeo.client.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Auth0AccessTokenResponse {
+public class AccessTokenResponse {
     @SerializedName("access_token")
     private String accessToken;
     @SerializedName("token_type")

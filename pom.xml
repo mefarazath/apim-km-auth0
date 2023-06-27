@@ -2,10 +2,11 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.wso2.km.ext.auth0</groupId>
-  <artifactId>auth0.auth.client</artifactId>
+  <groupId>org.wso2.km.ext.asgardeo</groupId>
+  <artifactId>asgardeo.auth.client</artifactId>
   <version>1.0.6-SNAPSHOT</version>
   <packaging>pom</packaging>
+
   <parent>
     <groupId>org.wso2</groupId>
     <artifactId>wso2</artifactId>
@@ -16,7 +17,7 @@
     <module>components/auth0.key.manager</module>
     <module>features/auth0.key.manager.feature</module>
   </modules>
-  <name>Client implementation to integrate with Auth0</name>
+  <name>Client implementation to integrate with Asgardeo</name>
   <url>http://wso2.org</url>
 
   <build>
@@ -70,8 +71,8 @@
         <version>${feign.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.wso2.km.ext.auth0</groupId>
-        <artifactId>auth0.key.manager</artifactId>
+        <groupId>org.wso2.km.ext.asgardeo</groupId>
+        <artifactId>asgardeo.key.manager</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
@@ -80,7 +81,7 @@
     <repository>
       <id>wso2-nexus</id>
       <name>WSO2 internal Repository</name>
-      <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+      <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
       <releases>
         <enabled>true</enabled>
         <updatePolicy>daily</updatePolicy>
@@ -90,7 +91,7 @@
     <repository>
       <id>wso2.releases</id>
       <name>WSO2 internal Repository</name>
-      <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+      <url>https://maven.wso2.org/nexus/content/repositories/releases/</url>
       <releases>
         <enabled>true</enabled>
         <updatePolicy>daily</updatePolicy>
@@ -100,7 +101,7 @@
     <repository>
       <id>wso2.snapshots</id>
       <name>Apache Snapshot Repository</name>
-      <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
+      <url>https://maven.wso2.org/nexus/content/repositories/snapshots/</url>
       <snapshots>
         <enabled>true</enabled>
         <updatePolicy>daily</updatePolicy>
@@ -150,12 +151,12 @@
     <repository>
       <id>nexus-releases</id>
       <name>WSO2 Release Distribution Repository</name>
-      <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
+      <url>https://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
       <id>wso2.snapshots</id>
       <name>Apache Snapshot Repository</name>
-      <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
+      <url>https://maven.wso2.org/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
   <scm>

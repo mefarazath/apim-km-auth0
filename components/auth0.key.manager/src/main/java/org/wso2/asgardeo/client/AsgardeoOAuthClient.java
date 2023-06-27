@@ -16,11 +16,10 @@
  * under the License.
  */
 
-package org.wso2.auth0.client;
+package org.wso2.asgardeo.client;
 
 import com.google.gson.Gson;
 import feign.Feign;
-import feign.FeignException;
 import feign.codec.ErrorDecoder;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
@@ -29,13 +28,12 @@ import feign.slf4j.Slf4jLogger;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.auth0.client.model.Auth0AccessTokenResponse;
-import org.wso2.auth0.client.model.Auth0APIKeyInterceptor;
-import org.wso2.auth0.client.model.Auth0ClientInfo;
-import org.wso2.auth0.client.model.Auth0ClientGrant;
-import org.wso2.auth0.client.model.Auth0ClientGrantInfo;
-import org.wso2.auth0.client.model.Auth0DCRClient;
-import org.wso2.auth0.client.model.Auth0TokenClient;
+import org.wso2.asgardeo.client.model.APIKeyInterceptor;
+import org.wso2.asgardeo.client.model.AccessTokenResponse;
+import org.wso2.asgardeo.client.model.Auth0ClientGrantInfo;
+import org.wso2.asgardeo.client.model.AsgardeoClientInfo;
+import org.wso2.asgardeo.client.model.AsgardeoDCRClient;
+import org.wso2.asgardeo.client.model.Auth0TokenClient;
 import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.model.API;
 import org.wso2.carbon.apimgt.api.model.AccessTokenInfo;
@@ -66,10 +64,10 @@ import java.util.Set;
 /**
  * Auth0 Client Implementation.
  */
-public class Auth0OAuthClient extends AbstractKeyManager {
-    private static final Log log = LogFactory.getLog(Auth0OAuthClient.class);
-    private Auth0DCRClient auth0DCRClient;
-    private Auth0ClientGrant auth0ClientGrant;
+public class AsgardeoOAuthClient extends AbstractKeyManager {
+    private static final Log log = LogFactory.getLog(AsgardeoOAuthClient.class);
+    private AsgardeoDCRClient auth0DCRClient;
+//    private Auth0ClientGrant auth0ClientGrant;
     private Auth0TokenClient auth0TokenClient;
 
     /**
@@ -84,9 +82,9 @@ public class Auth0OAuthClient extends AbstractKeyManager {
         String encodedCredentials;
         try {
             encodedCredentials = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret)
-                    .getBytes(Auth0Constants.UTF_8));
+                    .getBytes(AsgardeoConstants.UTF_8));
         } catch (UnsupportedEncodingException e) {
-            throw new APIManagementException(Auth0Constants.ERROR_ENCODING_METHOD_NOT_SUPPORTED, e);
+            throw new APIManagementException(AsgardeoConstants.ERROR_ENCODING_METHOD_NOT_SUPPORTED, e);
         }
 
         return encodedCredentials;
@@ -95,23 +93,23 @@ public class Auth0OAuthClient extends AbstractKeyManager {
     @Override
     public OAuthApplicationInfo createApplication(OAuthAppRequest oAuthAppRequest) throws APIManagementException {
         OAuthApplicationInfo oAuthApplicationInfo = oAuthAppRequest.getOAuthApplicationInfo();
-        Auth0ClientInfo clientInfo = createClientInfoFromOauthApplicationInfo(oAuthApplicationInfo);
-        Auth0ClientInfo createdApplication = auth0DCRClient.createApplication(clientInfo);
+        AsgardeoClientInfo clientInfo = createClientInfoFromOauthApplicationInfo(oAuthApplicationInfo);
+        AsgardeoClientInfo createdApplication = auth0DCRClient.createApplication(clientInfo);
         if (createdApplication != null) {
             OAuthApplicationInfo createdOauthApplication = createOAuthAppInfoFromResponse(createdApplication);
-            String audience = getAudienceFromAuthAppRequest(oAuthApplicationInfo);
-            Auth0ClientGrantInfo auth0ClientGrantInfo = new Auth0ClientGrantInfo(createdApplication.getClientId(),
-                    audience);
-            Auth0ClientGrantInfo addedClientGrant = null;
-            if (!audience.isEmpty()) {
-                addedClientGrant = auth0ClientGrant.createClientGrant(auth0ClientGrantInfo);
-            } else {
-                log.warn("Did not provide the audience");
-                return createdOauthApplication;
-            }
-            if (addedClientGrant == null) {
-                log.warn("Error while adding the audience");
-            }
+//            String audience = getAudienceFromAuthAppRequest(oAuthApplicationInfo);
+//            Auth0ClientGrantInfo auth0ClientGrantInfo = new Auth0ClientGrantInfo(createdApplication.getClientId(),
+//                    audience);
+//            Auth0ClientGrantInfo addedClientGrant = null;
+//            if (!audience.isEmpty()) {
+//                addedClientGrant = auth0ClientGrant.createClientGrant(auth0ClientGrantInfo);
+//            } else {
+//                log.warn("Did not provide the audience");
+//                return createdOauthApplication;
+//            }
+//            if (addedClientGrant == null) {
+//                log.warn("Error while adding the audience");
+//            }
             return createdOauthApplication;
         }
         return null;
@@ -129,7 +127,7 @@ public class Auth0OAuthClient extends AbstractKeyManager {
         if (parameter instanceof String) {
             additionalProperties = new Gson().fromJson((String) parameter, Map.class);
         }
-        return (String) additionalProperties.get(Auth0Constants.API_AUDIENCE);
+        return (String) additionalProperties.get(AsgardeoConstants.API_AUDIENCE);
     }
 
     /**
@@ -138,7 +136,7 @@ public class Auth0OAuthClient extends AbstractKeyManager {
      * @param createdApplication Response returned from server as a Map
      * @return OAuthApplicationInfo object will return.
      */
-    private OAuthApplicationInfo createOAuthAppInfoFromResponse(Auth0ClientInfo createdApplication) {
+    private OAuthApplicationInfo createOAuthAppInfoFromResponse(AsgardeoClientInfo createdApplication) {
         OAuthApplicationInfo appInfo = new OAuthApplicationInfo();
         appInfo.setClientName(createdApplication.getClientName());
         appInfo.setClientId(createdApplication.getClientId());
@@ -153,8 +151,8 @@ public class Auth0OAuthClient extends AbstractKeyManager {
         }
         if (StringUtils.isNotEmpty(createdApplication.getClientId())) {
             appInfo.addParameter(ApplicationConstants.OAUTH_CLIENT_ID, createdApplication.getClientId());
-            Auth0ClientGrantInfo[] clientGrantInfos = auth0ClientGrant.getClientGrant(createdApplication.getClientId());
-            audience = clientGrantInfos.length > 0 ? clientGrantInfos[0].getAudience() : "";
+//            Auth0ClientGrantInfo[] clientGrantInfos = auth0ClientGrant.getClientGrant(createdApplication.getClientId());
+//            audience = clientGrantInfos.length > 0 ? clientGrantInfos[0].getAudience() : "";
         }
         if (StringUtils.isNotEmpty(createdApplication.getClientSecret())) {
             appInfo.addParameter(ApplicationConstants.OAUTH_CLIENT_SECRET, createdApplication.getClientSecret());
@@ -165,7 +163,7 @@ public class Auth0OAuthClient extends AbstractKeyManager {
 
         String additionalProperties = new Gson().toJson(createdApplication);
         Map additionalPropMap = new Gson().fromJson(additionalProperties, Map.class);
-        additionalPropMap.put(Auth0Constants.API_AUDIENCE, audience);
+        additionalPropMap.put(AsgardeoConstants.API_AUDIENCE, audience);
         appInfo.addParameter(APIConstants.JSON_ADDITIONAL_PROPERTIES, additionalPropMap);
         return appInfo;
     }
@@ -177,8 +175,8 @@ public class Auth0OAuthClient extends AbstractKeyManager {
      * @param oAuthApplicationInfo Object that needs to be converted.
      * @return JSON payload.
      */
-    private Auth0ClientInfo createClientInfoFromOauthApplicationInfo(OAuthApplicationInfo oAuthApplicationInfo) {
-        Auth0ClientInfo clientInfo = new Auth0ClientInfo();
+    private AsgardeoClientInfo createClientInfoFromOauthApplicationInfo(OAuthApplicationInfo oAuthApplicationInfo) {
+        AsgardeoClientInfo clientInfo = new AsgardeoClientInfo();
         String userId = (String) oAuthApplicationInfo.getParameter(ApplicationConstants.
                 OAUTH_CLIENT_USERNAME);
         String userNameForSp = MultitenantUtils.getTenantAwareUsername(userId);
@@ -208,50 +206,50 @@ public class Auth0OAuthClient extends AbstractKeyManager {
         if (parameter instanceof String) {
             additionalProperties = new Gson().fromJson((String) parameter, Map.class);
         }
-        if (additionalProperties.containsKey((Auth0Constants.APP_TYPE))) {
-            clientInfo.setApplicationType((String) additionalProperties.get((Auth0Constants.APP_TYPE)));
-        } else {
-            clientInfo.setApplicationType(Auth0Constants.DEFAULT_CLIENT_APPLICATION_TYPE);
-        }
-        if (additionalProperties.containsKey(Auth0Constants.TOKEN_ENDPOINT_AUTH_METHOD)) {
-            clientInfo.setTokenEndpointAuthMethod((String)
-                    additionalProperties.get(Auth0Constants.TOKEN_ENDPOINT_AUTH_METHOD));
-        }
+//        if (additionalProperties.containsKey((Auth0Constants.APP_TYPE))) {
+//            clientInfo.setApplicationType((String) additionalProperties.get((Auth0Constants.APP_TYPE)));
+//        } else {
+//            clientInfo.setApplicationType(Auth0Constants.DEFAULT_CLIENT_APPLICATION_TYPE);
+//        }
+//        if (additionalProperties.containsKey(Auth0Constants.TOKEN_ENDPOINT_AUTH_METHOD)) {
+//            clientInfo.setTokenEndpointAuthMethod((String)
+//                    additionalProperties.get(Auth0Constants.TOKEN_ENDPOINT_AUTH_METHOD));
+//        }
         return clientInfo;
     }
 
     @Override
     public OAuthApplicationInfo updateApplication(OAuthAppRequest oAuthAppRequest) throws APIManagementException {
         OAuthApplicationInfo oAuthApplicationInfo = oAuthAppRequest.getOAuthApplicationInfo();
-        Auth0ClientInfo clientInfo = createClientInfoFromOauthApplicationInfo(oAuthApplicationInfo);
+        AsgardeoClientInfo clientInfo = createClientInfoFromOauthApplicationInfo(oAuthApplicationInfo);
         clientInfo.setClientSecret(oAuthApplicationInfo.getClientSecret());
-        Auth0ClientInfo createdApplication = auth0DCRClient.updateApplication(oAuthApplicationInfo.getClientId(),
+        AsgardeoClientInfo createdApplication = auth0DCRClient.updateApplication(oAuthApplicationInfo.getClientId(),
                 clientInfo);
         if (createdApplication != null) {
             OAuthApplicationInfo createdOAuthApplication = createOAuthAppInfoFromResponse(createdApplication);
             String audience = getAudienceFromAuthAppRequest(oAuthApplicationInfo);
             Auth0ClientGrantInfo auth0ClientGrantInfo = new Auth0ClientGrantInfo(createdApplication.getClientId(),
                     audience);
-            Auth0ClientGrantInfo addedClientGrant = null;
-            if (!audience.isEmpty()) {
-                try {
-                    addedClientGrant = auth0ClientGrant.createClientGrant(auth0ClientGrantInfo);
-                    if (addedClientGrant != null) {
-                        return createdOAuthApplication;
-                    }
-                } catch (FeignException e) {
-                    if (e.status() == 409) {
-                        log.warn("Client grant already exists.");
-                        return createdOAuthApplication;
-                    }
-                }
-            } else {
-                log.warn("Did not provide the audience");
-                return createdOAuthApplication;
-            }
-            if (addedClientGrant == null) {
-                log.warn("Error while adding the audience");
-            }
+//            Auth0ClientGrantInfo addedClientGrant = null;
+//            if (!audience.isEmpty()) {
+//                try {
+//                    addedClientGrant = auth0ClientGrant.createClientGrant(auth0ClientGrantInfo);
+//                    if (addedClientGrant != null) {
+//                        return createdOAuthApplication;
+//                    }
+//                } catch (FeignException e) {
+//                    if (e.status() == 409) {
+//                        log.warn("Client grant already exists.");
+//                        return createdOAuthApplication;
+//                    }
+//                }
+//            } else {
+//                log.warn("Did not provide the audience");
+//                return createdOAuthApplication;
+//            }
+//            if (addedClientGrant == null) {
+//                log.warn("Error while adding the audience");
+//            }
             return createdOAuthApplication;
         }
         return null;
@@ -264,7 +262,7 @@ public class Auth0OAuthClient extends AbstractKeyManager {
 
     @Override
     public OAuthApplicationInfo retrieveApplication(String clientID) throws APIManagementException {
-        Auth0ClientInfo auth0ClientInfo = auth0DCRClient.getApplication(clientID);
+        AsgardeoClientInfo auth0ClientInfo = auth0DCRClient.getApplication(clientID);
         OAuthApplicationInfo createdOauthApplication = createOAuthAppInfoFromResponse(auth0ClientInfo);
         return createdOauthApplication;
     }
@@ -272,15 +270,16 @@ public class Auth0OAuthClient extends AbstractKeyManager {
     @Override
     public AccessTokenInfo getNewApplicationAccessToken(AccessTokenRequest accessTokenRequest)
             throws APIManagementException {
-        Auth0ClientGrantInfo[] clientGrantInfos = auth0ClientGrant.getClientGrant(accessTokenRequest.getClientId());
-        String audience = clientGrantInfos.length > 0 ? clientGrantInfos[0].getAudience() : "";
+//        Auth0ClientGrantInfo[] clientGrantInfos = auth0ClientGrant.getClientGrant(accessTokenRequest.getClientId());
+//        String audience = clientGrantInfos.length > 0 ? clientGrantInfos[0].getAudience() : "";
+        String audience = "";
         String scopes = accessTokenRequest.getScope() != null && (accessTokenRequest.getScope().length > 0) ?
                 String.join(" ", accessTokenRequest.getScope()) : "";
         String grantType = accessTokenRequest.getGrantType() != null ?
-                accessTokenRequest.getGrantType() : Auth0Constants.GRANT_TYPE_CLIENT_CREDENTIALS;
+                accessTokenRequest.getGrantType() : AsgardeoConstants.GRANT_TYPE_CLIENT_CREDENTIALS;
         String basicCredentials = getEncodedCredentials(accessTokenRequest.getClientId(),
                 accessTokenRequest.getClientSecret());
-        Auth0AccessTokenResponse retrievedAccessTokenResponse = auth0TokenClient.getAccessToken(grantType, audience,
+        AccessTokenResponse retrievedAccessTokenResponse = auth0TokenClient.getAccessToken(grantType, audience,
                 scopes, basicCredentials);
         if (retrievedAccessTokenResponse != null) {
             AccessTokenInfo accessTokenInfo = new AccessTokenInfo();
@@ -298,7 +297,7 @@ public class Auth0OAuthClient extends AbstractKeyManager {
 
     @Override
     public String getNewApplicationConsumerSecret(AccessTokenRequest accessTokenRequest) throws APIManagementException {
-        Auth0ClientInfo createdApplication = auth0DCRClient.regenerateClientSecret(accessTokenRequest.getClientId());
+        AsgardeoClientInfo createdApplication = auth0DCRClient.regenerateClientSecret(accessTokenRequest.getClientId());
         return createdApplication.getClientSecret();
     }
 
@@ -328,22 +327,22 @@ public class Auth0OAuthClient extends AbstractKeyManager {
                 .decoder(new GsonDecoder()).errorDecoder(new ErrorDecoder.Default())
                 .logger(new Slf4jLogger()).target(Auth0TokenClient.class,
                         (String) keyManagerConfiguration.getParameter(APIConstants.KeyManager.TOKEN_ENDPOINT));
-        Auth0APIKeyInterceptor auth0APIKeyInterceptor = new Auth0APIKeyInterceptor(auth0TokenClient,
-                (String) keyManagerConfiguration.getParameter(Auth0Constants.CLIENT_ID),
-                (String) keyManagerConfiguration.getParameter(Auth0Constants.CLIENT_SECRET),
-                (String) keyManagerConfiguration.getParameter(Auth0Constants.AUDIENCE));
+        APIKeyInterceptor auth0APIKeyInterceptor = new APIKeyInterceptor(auth0TokenClient,
+                (String) keyManagerConfiguration.getParameter(AsgardeoConstants.CLIENT_ID),
+                (String) keyManagerConfiguration.getParameter(AsgardeoConstants.CLIENT_SECRET),
+                (String) keyManagerConfiguration.getParameter(AsgardeoConstants.AUDIENCE));
         String clientRegistrationEndpoint =
-                ((String) keyManagerConfiguration.getParameter(Auth0Constants.AUDIENCE)).concat("clients");
-        String clientGrantEndpoint =
-                ((String) keyManagerConfiguration.getParameter(Auth0Constants.AUDIENCE)).concat("client-grants");
+                ((String) keyManagerConfiguration.getParameter(APIConstants.KeyManager.CLIENT_REGISTRATION_ENDPOINT));
+//        String clientGrantEndpoint =
+//                ((String) keyManagerConfiguration.getParameter(Auth0Constants.AUDIENCE)).concat("client-grants");
         auth0DCRClient = Feign.builder().client(new OkHttpClient()).encoder(new GsonEncoder())
                 .decoder(new GsonDecoder()).errorDecoder(new ErrorDecoder.Default())
                 .logger(new Slf4jLogger()).requestInterceptor(auth0APIKeyInterceptor)
-                .target(Auth0DCRClient.class, clientRegistrationEndpoint);
-        auth0ClientGrant = Feign.builder().client(new OkHttpClient()).encoder(new GsonEncoder())
-                .decoder(new GsonDecoder()).errorDecoder(new ErrorDecoder.Default())
-                .logger(new Slf4jLogger()).requestInterceptor(auth0APIKeyInterceptor)
-                .target(Auth0ClientGrant.class, clientGrantEndpoint);
+                .target(AsgardeoDCRClient.class, clientRegistrationEndpoint);
+//        auth0ClientGrant = Feign.builder().client(new OkHttpClient()).encoder(new GsonEncoder())
+//                .decoder(new GsonDecoder()).errorDecoder(new ErrorDecoder.Default())
+//                .logger(new Slf4jLogger()).requestInterceptor(auth0APIKeyInterceptor)
+//                .target(Auth0ClientGrant.class, clientGrantEndpoint);
     }
 
     @Override
@@ -435,6 +434,6 @@ public class Auth0OAuthClient extends AbstractKeyManager {
 
     @Override
     public String getType() {
-        return Auth0Constants.AUTH0_TYPE;
+        return AsgardeoConstants.AUTH0_TYPE;
     }
 }

@@ -16,22 +16,16 @@
  * under the License.
  */
 
-package org.wso2.auth0.client.model;
+package org.wso2.asgardeo.client.model;
 
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
-public interface Auth0ClientGrant {
-    @RequestLine("GET ?client_id={client_id}")
-    @Headers("Content-Type: application/json")
-    public Auth0ClientGrantInfo[] getClientGrant(@Param("client_id") String clientId);
-
+public interface Auth0TokenClient {
     @RequestLine("POST")
-    @Headers("Content-Type: application/json")
-    public Auth0ClientGrantInfo createClientGrant(Auth0ClientGrantInfo clientGrant);
-
-    @RequestLine("PATCH /{grantId}")
-    @Headers("Content-Type: application/json")
-    public Auth0ClientInfo updateClientGrant(@Param("grantId") String grantId, Auth0ClientGrantInfo clientGrant);
+    @Headers({"Content-Type: application/x-www-form-urlencoded", "Authorization: Basic {base64encodedString}"})
+    public AccessTokenResponse getAccessToken(@Param("grant_type") String grantType,
+                                              @Param("audience") String audience, @Param("scope") String scope,
+                                              @Param("base64encodedString") String base64encodedString);
 }

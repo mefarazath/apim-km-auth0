@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.auth0.client;
+package org.wso2.asgardeo.client;
 
 import org.osgi.service.component.annotations.Component;
 import org.wso2.carbon.apimgt.api.model.ConfigurationDto;
@@ -28,14 +28,14 @@ import java.util.Collections;
 import java.util.List;
 
 @Component(
-        name = "auth0.configuration.component",
+        name = "asgardeo.configuration.component",
         immediate = true,
         service = KeyManagerConnectorConfiguration.class
 )
-public class Auth0ConnectorConfiguration implements KeyManagerConnectorConfiguration {
+public class AsgardeoConnectorConfiguration implements KeyManagerConnectorConfiguration {
     @Override
     public String getImplementation() {
-        return Auth0OAuthClient.class.getName();
+        return AsgardeoOAuthClient.class.getName();
     }
 
     @Override
@@ -47,14 +47,14 @@ public class Auth0ConnectorConfiguration implements KeyManagerConnectorConfigura
     public List<ConfigurationDto> getConnectionConfigurations() {
         List<ConfigurationDto> configurationDtoList = new ArrayList<>();
         configurationDtoList
-                .add(new ConfigurationDto(Auth0Constants.CLIENT_ID, "Client ID", "input",
+                .add(new ConfigurationDto(AsgardeoConstants.CLIENT_ID, "Client ID", "input",
                         "Client ID of Service Application", "", true,
                         false, Collections.emptyList(), false));
         configurationDtoList
-                .add(new ConfigurationDto(Auth0Constants.CLIENT_SECRET, "Client Secret", "input",
+                .add(new ConfigurationDto(AsgardeoConstants.CLIENT_SECRET, "Client Secret", "input",
                         "Client Secret of Service Application", "", true,
                         true, Collections.emptyList(), false));
-        configurationDtoList.add(new ConfigurationDto(Auth0Constants.AUDIENCE, "Audience", "input",
+        configurationDtoList.add(new ConfigurationDto(AsgardeoConstants.AUDIENCE, "Audience", "input",
                 "Audience of the Admin API", "https://[tenant].[region].auth0.com/api/v2/",
                 true, false, Collections.emptyList(), false));
         return configurationDtoList;
@@ -78,21 +78,21 @@ public class Auth0ConnectorConfiguration implements KeyManagerConnectorConfigura
 
     @Override
     public String getType() {
-        return Auth0Constants.AUTH0_TYPE;
+        return AsgardeoConstants.AUTH0_TYPE;
     }
 
     @Override
     public String getDisplayName() {
-        return Auth0Constants.AUTH0_DISPLAY_NAME;
+        return AsgardeoConstants.AUTH0_DISPLAY_NAME;
     }
 
     @Override
     public String getDefaultScopesClaim() {
-        return Auth0Constants.SCOPE;
+        return AsgardeoConstants.SCOPE;
     }
 
     @Override
     public String getDefaultConsumerKeyClaim() {
-        return Auth0Constants.AZP;
+        return AsgardeoConstants.AZP;
     }
 }

@@ -16,24 +16,24 @@
  * under the License.
  */
 
-package org.wso2.auth0.client.model;
+package org.wso2.asgardeo.client.model;
 
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
-public interface Auth0DCRClient {
+public interface AsgardeoDCRClient {
     @RequestLine("POST")
     @Headers("Content-Type: application/json")
-    public Auth0ClientInfo createApplication(Auth0ClientInfo clientInfo);
+    public AsgardeoClientInfo createApplication(AsgardeoClientInfo clientInfo);
 
     @RequestLine("GET /{clientId}")
     @Headers("Content-Type: application/json")
-    public Auth0ClientInfo getApplication(@Param("clientId") String clientId);
+    public AsgardeoClientInfo getApplication(@Param("clientId") String clientId);
 
-    @RequestLine("PATCH /{clientId}")
+    @RequestLine("PUT /{clientId}")
     @Headers("Content-Type: application/json")
-    public Auth0ClientInfo updateApplication(@Param("clientId") String clientId, Auth0ClientInfo clientInfo);
+    public AsgardeoClientInfo updateApplication(@Param("clientId") String clientId, AsgardeoClientInfo clientInfo);
 
     @RequestLine("DELETE /{clientId}")
     @Headers("Content-Type: application/json")
@@ -41,5 +41,5 @@ public interface Auth0DCRClient {
 
     @RequestLine("POST /{clientId}/rotate-secret")
     @Headers("Content-Type: application/json")
-    public Auth0ClientInfo regenerateClientSecret(@Param("clientId") String clientId);
+    public AsgardeoClientInfo regenerateClientSecret(@Param("clientId") String clientId);
 }

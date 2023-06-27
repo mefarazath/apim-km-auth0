@@ -16,27 +16,27 @@
  * under the License.
  */
 
-package org.wso2.auth0.client.model;
+package org.wso2.asgardeo.client.model;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.auth0.client.Auth0Constants;
-import org.wso2.auth0.client.Auth0OAuthClient;
+import org.wso2.asgardeo.client.AsgardeoConstants;
+import org.wso2.asgardeo.client.AsgardeoOAuthClient;
 import org.wso2.carbon.apimgt.api.APIManagementException;
 
-public class Auth0APIKeyInterceptor implements RequestInterceptor {
-    private static final Log log = LogFactory.getLog(Auth0APIKeyInterceptor.class);
+public class APIKeyInterceptor implements RequestInterceptor {
+    private static final Log log = LogFactory.getLog(APIKeyInterceptor.class);
 
-    private Auth0AccessTokenResponse accessTokenInfo;
+    private AccessTokenResponse accessTokenInfo;
     private Auth0TokenClient auth0TokenClient;
     private String consumerKey;
     private String consumerSecret;
     private String audience;
 
-    public Auth0APIKeyInterceptor(Auth0TokenClient auth0TokenClient, String consumerKey, String consumerSecret,
-                                  String audience) {
+    public APIKeyInterceptor(Auth0TokenClient auth0TokenClient, String consumerKey, String consumerSecret,
+                             String audience) {
         this.auth0TokenClient = auth0TokenClient;
         this.consumerKey = consumerKey;
         this.consumerSecret = consumerSecret;
@@ -59,10 +59,10 @@ public class Auth0APIKeyInterceptor implements RequestInterceptor {
      */
     private void getAccessToken() {
         try {
-            String basicCredentials = Auth0OAuthClient.getEncodedCredentials(this.consumerKey, this.consumerSecret);
-            Auth0AccessTokenResponse accessTokenResponse =
-                    auth0TokenClient.getAccessToken(Auth0Constants.GRANT_TYPE_CLIENT_CREDENTIALS, this.audience,
-                            "", basicCredentials);
+            String basicCredentials = AsgardeoOAuthClient.getEncodedCredentials(this.consumerKey, this.consumerSecret);
+            AccessTokenResponse accessTokenResponse =
+                    auth0TokenClient.getAccessToken(AsgardeoConstants.GRANT_TYPE_CLIENT_CREDENTIALS, this.audience,
+                            AsgardeoConstants.APP_MANAGEMENT_SCOPES, basicCredentials);
             if (accessTokenResponse != null) {
                 this.accessTokenInfo = accessTokenResponse;
                 this.accessTokenInfo.setCreatedAt(System.currentTimeMillis());
